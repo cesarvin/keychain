@@ -22,12 +22,50 @@ def createSystemTables(cnn):
         #coneccion a la db, la crea si no existe
         c = cnn.cursor()
         #crea la tabla para la clave principal
-        c.execute("""CREATE TABLE main_pass (password text, nonce text, tag text);""")
-        c.execute("""CREATE TABLE All_info (Page text,pass text);""")
+        c.execute("""CREATE TABLE main (salt text);""")
+        c.execute("""CREATE TABLE info (name text,password text, nonce text, tag text);""")
 
     except Error as e:
         print (e)
 
+def save_salt(sp):
+    try: 
+        #coneccion a la db, la crea si no existe
+        cnn = conection(db_file)
+        createSystemTables(cnn)
+        insert_salt(cnn, sp)
+        cnn.commit()
+        cnn.close()
+
+    except Error as e:
+        print (e)
+    finally:
+        if cnn:
+            cnn.close()
+
+def insert_salt(cnn, sp):
+    try:
+        c = cnn.cursor()
+        c.execute("INSERT INTO main(salt) VALUES(?)", (sp,))
+    except Error as e: 
+        print(e)
+
+def get_salt():
+    try: 
+        cnn = conection(db_file)
+        c = cnn.cursor()
+        c.execute("""SELECT salt FROM main""")
+        rows = c.fetchall()
+        
+        for row in rows: 
+            salt = row[0]
+        
+    except Error as e:
+        print (e)
+    finally:
+        if cnn:
+            cnn.close()
+    return salt
 
 def Set_Values(site, password):
     try:
@@ -61,7 +99,7 @@ def Set_Values(site, password):
         print(e)
 
 
-def Find_Values(site, acc):       
+def Find_Values(site):       
     try:
         #coneccion a la db, la crea si no existe
         cnn = conection(db_file)
@@ -98,7 +136,7 @@ def Delete_values(site):
         
         #coneccion a la db, la crea si no existe
         
-        if (Find_Values(site,1)!= None):
+        if (Find_Values(site)!= None):
             print ("El sitio no existe")
             return False
         else:
@@ -124,25 +162,7 @@ def insertMainPass(cnn, password):
     except Error as e: 
         print(e)
 
-def register(password):
-    
-    try: 
-        #coneccion a la db, la crea si no existe
-        cnn = conection(db_file)
-        
-        createSystemTables(cnn)
 
-        insertMainPass(cnn, password)
-
-        cnn.commit()
-
-        cnn.close()
-
-    except Error as e:
-        print (e)
-    finally:
-        if cnn:
-            cnn.close()
 
 def login(password):
     logged = False
@@ -155,11 +175,11 @@ def login(password):
         
         rows = c.fetchall()
 
-        for row in rows: 
-            main_pass = row[0],row[1],row[2]
-            dp = decryptMainPass(main_pass)
-            if (dp.decode("utf-8")==password):
-                logged = True
+        # for row in rows: 
+        #     main_pass = row[0],row[1],row[2]
+        #     #dp = decryptMainPass(main_pass)
+        #     if (dp.decode("utf-8")==password):
+        #         logged = True
         
     except Error as e:
         print (e)
