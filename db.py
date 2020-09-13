@@ -67,7 +67,7 @@ def get_salt():
             cnn.close()
     return salt
 
-def Set_Values(site, password):
+def Insert_site(site, password, nonce, tag):
     try:
         #coneccion a la db, la crea si no existe
         
@@ -79,7 +79,7 @@ def Set_Values(site, password):
                 cnn = conection(db_file)
 
                 c = cnn.cursor()
-                c.execute("INSERT INTO All_info (Page,pass) VALUES(?,?)", (site,password,))
+                c.execute("INSERT INTO All_info (name,password,nonce,tag) VALUES(?,?,?,?)", (site,password,nonce,tag))
                 cnn.commit()
 
                 cnn.close()
@@ -90,7 +90,7 @@ def Set_Values(site, password):
             cnn = conection(db_file)
 
             c = cnn.cursor()
-            c.execute("INSERT INTO All_info (Page,pass) VALUES(?,?)", (site,password,))
+            c.execute("INSERT INTO All_info (name,password,nonce,tag) VALUES(?,?,?,?)", (site,password,nonce,tag))
             cnn.commit()
 
             cnn.close()
