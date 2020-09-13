@@ -2,6 +2,7 @@ from hashlib import sha256
 from backports.pbkdf2 import pbkdf2_hmac
 import binascii, os
 from db import *
+from cifrado import *
 import os
 import os.path
 from os import listdir
@@ -32,7 +33,9 @@ class Keychain(object):
         pass
 
     def set_value(self, value, password):
-        pass
+        site=hash_Sha256(value)
+        psw,nonce,tag=encrypt_AES_GCM(password,self.pass_pbkdf2)
+        Insert_site(site,psw,nonce,tag)
 
     def get_value(self, value):
         nombre = value
