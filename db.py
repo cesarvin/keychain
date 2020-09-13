@@ -54,7 +54,7 @@ def get_salt():
     try: 
         cnn = conection(db_file)
         c = cnn.cursor()
-        c.execute("""SELECT salt FROM main""")
+        c.execute("""SELECT salt FROM main LIMIT 1""")
         rows = c.fetchall()
         
         for row in rows: 
