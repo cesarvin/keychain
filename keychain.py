@@ -59,5 +59,8 @@ class Keychain(object):
         return self.site_pass
 
     def remove(self, name):
-        pass
+        nombre = name
+        nombre_cifrado = hash_Sha256(nombre)
+        delete_site(nombre_cifrado)
+        print("Exito! se elimino el sitio")
 
