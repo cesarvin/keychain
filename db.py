@@ -71,7 +71,7 @@ def insert_site(site, password, nonce, tag, key=None):
     try:
         #coneccion a la db, la crea si no existe
         
-        if (search(site, key) == None):
+        if (search_site(site, key) == None):
             cnn = conection(db_file)
 
             c = cnn.cursor()
@@ -108,7 +108,7 @@ def delete_site(site):
         print(e)
 
 
-def search(site, key):       
+def search_site(site, key):       
     try:
         #coneccion a la db, la crea si no existe
         cnn = conection(db_file)
@@ -131,3 +131,18 @@ def search(site, key):
 
     except Error as e: 
         print(e)
+
+def search_all():       
+    try:
+        #coneccion a la db, la crea si no existe
+        cnn = conection(db_file)
+        c = cnn.cursor()
+
+        c.execute("SELECT name, password FROM info ")
+        rows=c.fetchall()
+       
+        cnn.close()
+        return rows
+
+    except Error as e: 
+        print(e)        

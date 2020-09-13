@@ -33,11 +33,7 @@ class Keychain(object):
         pass
 
     def dump(self):
-        # se conecta con la bd
-        cnn = conection(db_file)
-        c = cnn.cursor()
-        c.execute('SELECT name, password FROM info')
-        rows = c.fetchall()
+        rows = search_all()
         tuples = {}
         # mete las tuplas en un diccionario value: sitio web, key: password
         for row in rows:
@@ -55,7 +51,7 @@ class Keychain(object):
     def get_value(self, value):
         nombre = value
         nombre_cifrado = hash_Sha256(nombre)
-        self.site_pass = search(nombre_cifrado, self.pass_pbkdf2)
+        self.site_pass = search_site(nombre_cifrado, self.pass_pbkdf2)
         return self.site_pass
 
     def remove(self, name):
