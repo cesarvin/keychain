@@ -98,6 +98,21 @@ def insert_site(site, password,nonce,tag):
     except Error as e: 
         print(e)
 
+def delete_site(site):
+    try:
+        #coneccion a la db, la crea si no existe
+        cnn = conection(db_file)
+        c = cnn.cursor()
+
+        c.execute("DELETE FROM info WHERE name = ? LIMIT 1", (site,))
+        
+        cnn.commit()
+
+        cnn.close()
+
+    except Error as e: 
+        print(e)
+
 
 def search(site, key):       
     try:
@@ -119,28 +134,6 @@ def search(site, key):
     except Error as e: 
         print(e)
 
-def Delete_values(site):
-    
-    try:
-        
-        #coneccion a la db, la crea si no existe
-        
-        if (Find_Values(site)!= None):
-            print ("El sitio no existe")
-            return False
-        else:
-            cnn = conection(db_file)
-
-            c = cnn.cursor()
-            c.execute("""DELETE from All_info where Page = ?""", (site,))
-            cnn.commit()
-
-            cnn.close()
-            print ("Se elimino satisfactoriamente el registro del sitio ", site)
-            return True
-
-    except Error as e: 
-        print(e)
 
 def insertMainPass(cnn, password):
     try:
