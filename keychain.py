@@ -9,6 +9,7 @@ from os import listdir
 from os.path import isfile, join
 import time
 from cifrado import *
+import hmac
 
 class Keychain(object):
     def __init__(self):
@@ -32,12 +33,24 @@ class Keychain(object):
         pass
 
     def dump(self):
-        pass
+        # se conecta con la bd
+        cnn = conection(db_file)
+        c = cnn.cursor()
+        c.execute('SELECT name, password FROM info')
+        rows = c.fetchall()
+        tuples = {}
+        # mete las tuplas en un diccionario value: sitio web, key: password
+        for row in rows:
+            tuples[row[1]] = row[0]
+
+        tuples_password = sha256_Hmac(mensaje=tuples, llave=self.pass_pbkdf2)
+        return tuples, tuples_password
+
 
     def set_value(self, value, password):
         site = hash_Sha256(value)
         psw, nonce, tag = encrypt_AES_GCM( password.encode("utf8"), self.pass_pbkdf2 )
-        insert_site(site, psw, nonce, tag, self.pass_pbkdf2)
+        insert_site(site, psw, nonce, tag)
 
     def get_value(self, value):
         nombre = value
@@ -46,8 +59,5 @@ class Keychain(object):
         return self.site_pass
 
     def remove(self, name):
-        nombre = name
-        nombre_cifrado = hash_Sha256(nombre)
-        delete_site(nombre_cifrado)
-        print("Exito! se elimino el sitio")
+        pass
 

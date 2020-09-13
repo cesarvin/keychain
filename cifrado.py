@@ -1,6 +1,7 @@
 from Crypto.Cipher import AES
 import binascii, os
 from hashlib import sha256
+import hmac
 
 def encrypt_AES_GCM(value, key):
   aesCipher = AES.new(key, AES.MODE_GCM)
@@ -26,3 +27,6 @@ def hash_Sha256(texto):
   h=sha256()
   h.update(texto.encode())
   return h.hexdigest()
+
+def sha256_Hmac(mensaje, llave):
+  return hmac.new(key=bytes(str(llave), encoding='utf-8'), msg=bytes(str(mensaje), encoding='utf-8'), digestmod=sha256).hexdigest()
