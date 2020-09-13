@@ -1,5 +1,6 @@
 from Crypto.Cipher import AES
 import binascii, os
+from hashlib import sha256
 
 def encrypt_AES_GCM(value, key):
   aesCipher = AES.new(key, AES.MODE_GCM)
@@ -20,3 +21,8 @@ def encryptMainPass(password, key):
 def decryptMainPass(password, key):
   dec_pass = decrypt_AES_GCM(password, key)
   return dec_pass
+
+def hash_Sha256(texto):
+  h=sha256()
+  h.update(texto.encode())
+  return h.hexdigest()
