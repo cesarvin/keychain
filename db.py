@@ -67,30 +67,30 @@ def get_salt():
             cnn.close()
     return salt
 
-def Insert_site(site, password, nonce, tag):
+def insert_site(site, password,nonce,tag):
     try:
         #coneccion a la db, la crea si no existe
         
         # if (Find_Values(site,1)== None):
-        if (Find_Values(site)== None):
-            op = input ("El sitio ya existe , desea actualizarlo?(1=si/2=no) ")
-            if (op==1):
+        # if (Find_Values(site)== None):
+        #     op = input ("El sitio ya existe , desea actualizarlo?(1=si/2=no) ")
+        #     if (op==1):
                 
-                cnn = conection(db_file)
+        #         cnn = conection(db_file)
 
-                c = cnn.cursor()
-                c.execute("INSERT INTO All_info (name,password,nonce,tag) VALUES(?,?,?,?)", (site,password,nonce,tag))
-                cnn.commit()
+        #         c = cnn.cursor()
+        #         c.execute("INSERT INTO All_info (name,password,nonce,tag) VALUES(?,?,?,?)", (site,password,nonce,tag))
+        #         cnn.commit()
 
-                cnn.close()
-            else:
-                print ("no se ha modificado ningun registro")
+        #         cnn.close()
+        #     else:
+        #         print ("no se ha modificado ningun registro")
             
-        else:
+        # else:
             cnn = conection(db_file)
 
             c = cnn.cursor()
-            c.execute("INSERT INTO All_info (name,password,nonce,tag) VALUES(?,?,?,?)", (site,password,nonce,tag))
+            c.execute("INSERT INTO info(name, password, nonce, tag) VALUES(?,?,?,?)", (site, password, nonce, tag,))
             cnn.commit()
 
             cnn.close()
