@@ -365,3 +365,6 @@ FodyWeavers.xsd
 #*.bmp
 
 *.bd
+.vscode/settings.json
+prueba.py
+storage.db
