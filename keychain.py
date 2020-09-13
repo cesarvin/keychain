@@ -37,7 +37,7 @@ class Keychain(object):
     def set_value(self, value, password):
         site = hash_Sha256(value)
         psw, nonce, tag = encrypt_AES_GCM( password.encode("utf8"), self.pass_pbkdf2 )
-        insert_site(site, psw, nonce, tag)
+        insert_site(site, psw, nonce, tag, self.pass_pbkdf2)
 
     def get_value(self, value):
         nombre = value

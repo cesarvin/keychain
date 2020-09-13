@@ -67,30 +67,24 @@ def get_salt():
             cnn.close()
     return salt
 
-def insert_site(site, password,nonce,tag):
+def insert_site(site, password, nonce, tag, key=None):
     try:
         #coneccion a la db, la crea si no existe
         
-        # if (Find_Values(site,1)== None):
-        # if (Find_Values(site)== None):
-        #     op = input ("El sitio ya existe , desea actualizarlo?(1=si/2=no) ")
-        #     if (op==1):
-                
-        #         cnn = conection(db_file)
-
-        #         c = cnn.cursor()
-        #         c.execute("INSERT INTO All_info (name,password,nonce,tag) VALUES(?,?,?,?)", (site,password,nonce,tag))
-        #         cnn.commit()
-
-        #         cnn.close()
-        #     else:
-        #         print ("no se ha modificado ningun registro")
-            
-        # else:
+        if (search(site, key) == None):
             cnn = conection(db_file)
 
             c = cnn.cursor()
             c.execute("INSERT INTO info(name, password, nonce, tag) VALUES(?,?,?,?)", (site, password, nonce, tag,))
+            cnn.commit()
+
+            cnn.close()
+            
+        else:
+            cnn = conection(db_file)
+
+            c = cnn.cursor()
+            c.execute("UPDATE info SET password =?, nonce=?, tag=? WHERE name=?", (password, nonce, tag, site,))
             cnn.commit()
 
             cnn.close()
@@ -137,40 +131,3 @@ def search(site, key):
 
     except Error as e: 
         print(e)
-
-
-def insertMainPass(cnn, password):
-    try:
-        c = cnn.cursor()
-        
-        c.execute("INSERT INTO main_pass(password,nonce,tag) VALUES(?,?,?)", (password[0], password[1], password[2],))
-
-    except Error as e: 
-        print(e)
-
-
-
-def login(password):
-    logged = False
-    try: 
-        cnn = conection(db_file)
-        c = cnn.cursor()
-        #consulta si el password est� en la db
-        c.execute("""SELECT password, nonce, tag FROM main_pass""")
-        #c.execute("SELECT * FROM main_pass ")
-        
-        rows = c.fetchall()
-
-        # for row in rows: 
-        #     main_pass = row[0],row[1],row[2]
-        #     #dp = decryptMainPass(main_pass)
-        #     if (dp.decode("utf-8")==password):
-        #         logged = True
-        
-    except Error as e:
-        print (e)
-    finally:
-        if cnn:
-            cnn.close()
-
-    return logged
