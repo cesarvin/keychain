@@ -99,34 +99,23 @@ def Set_Values(site, password):
         print(e)
 
 
-def Find_Values(site):       
+def search(site):       
     try:
         #coneccion a la db, la crea si no existe
         cnn = conection(db_file)
-               
-
         c = cnn.cursor()
 
-        c.execute("SELECT pass FROM All_info WHERE Page = ?", (site,))
+        c.execute("SELECT password, nonce, tag FROM info WHERE nombre = ? LIMIT 1", (site,))
         data=c.fetchall()
-        if len(data)==0:
-
-            # if (acc==0):
-            print('There is no component named %s'%site)
-           
-            return True
-        else:
-            print('El registro existe -- siguiendo con la operacion ')
-            #if (acc==0):
-                
-            password = str(data[0])
-            print ('Password is ', password[2:-3])
-            return None
-        cnn.commit()
+        for row in rows: 
+            site_pass = row[0],row[1],row[2]
+            dp = decryptMainPass(site_pass)
+        #     if (dp.decode("utf-8")==password):
+        #         logged = True
 
         cnn.close()
+        return dp.decode("utf-8")
 
-        
     except Error as e: 
         print(e)
 

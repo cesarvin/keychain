@@ -7,6 +7,7 @@ import os.path
 from os import listdir
 from os.path import isfile, join
 import time
+from cifrado import *
 
 class Keychain(object):
     def __init__(self):
@@ -33,8 +34,11 @@ class Keychain(object):
     def set_value(self, value, password):
         pass
 
-    def get_value(self, value, password):
-        pass
+    def get_value(self, value):
+        nombre = value
+        nombre_cifrado = hash_Sha256(nombre)
+        self.site_pass = search(nombre_cifrado)
+        return self.site_pass
 
     def remove(self, name):
         pass
