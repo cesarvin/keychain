@@ -1,0 +1,22 @@
+from Crypto.Cipher import AES
+import binascii, os
+
+def encrypt_AES_GCM(value, key):
+  aesCipher = AES.new(key, AES.MODE_GCM)
+  ciphertext, authTag = aesCipher.encrypt_and_digest(value)
+  return (ciphertext, aesCipher.nonce, authTag)
+  #return ciphertext
+
+def decrypt_AES_GCM(encrypt_value, key):
+  (ciphertext, nonce, authTag) = encrypt_value
+  aesCipher = AES.new(key, AES.MODE_GCM, nonce)
+  plaintext = aesCipher.decrypt_and_verify(ciphertext, authTag)
+  return plaintext
+
+def encryptMainPass(password, key):
+  ecn_pass = encrypt_AES_GCM(password.encode("utf8"), key)
+  return ecn_pass
+
+def decryptMainPass(password, key):
+  dec_pass = decrypt_AES_GCM(password, key)
+  return dec_pass
