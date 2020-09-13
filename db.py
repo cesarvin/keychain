@@ -104,7 +104,7 @@ def delete_site(site):
         cnn = conection(db_file)
         c = cnn.cursor()
 
-        c.execute("DELETE FROM info WHERE name = ? LIMIT 1", (site,))
+        c.execute("DELETE FROM info WHERE name = ?", (site,))
         
         cnn.commit()
 
@@ -122,14 +122,18 @@ def search(site, key):
 
         c.execute("SELECT password, nonce, tag FROM info WHERE name = ? LIMIT 1", (site,))
         rows=c.fetchall()
-        for row in rows: 
-            site_pass = row[0],row[1],row[2]
-            dp = decryptMainPass(site_pass, key)
-        #     if (dp.decode("utf-8")==password):
-        #         logged = True
+        if len(rows) == 0:
+            cnn.close()
+            return None
+        else:
+            for row in rows: 
+                site_pass = row[0],row[1],row[2]
+                dp = decryptMainPass(site_pass, key)
+            #     if (dp.decode("utf-8")==password):
+            #         logged = True
 
-        cnn.close()
-        return dp.decode("utf-8")
+            cnn.close()
+            return dp.decode("utf-8")
 
     except Error as e: 
         print(e)

@@ -49,5 +49,5 @@ class Keychain(object):
         nombre = name
         nombre_cifrado = hash_Sha256(nombre)
         delete_site(nombre_cifrado)
-        print("exito")
+        print("Exito! se elimino el sitio")
 
