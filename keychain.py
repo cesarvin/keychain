@@ -12,6 +12,8 @@ from cifrado import *
 
 class Keychain(object):
     def __init__(self):
+        self.salt = None
+        self.pass_pbkdf2 = None
         pass
 
     def init(self, password):
@@ -22,7 +24,7 @@ class Keychain(object):
             self.salt = os.urandom(64)
             save_salt(self.salt)
         # pbkdf2
-        i = os.O_RANDOM
+        i = 5
         password = password.encode("utf8")
         self.pass_pbkdf2 = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * i, 32)
 
@@ -33,9 +35,9 @@ class Keychain(object):
         pass
 
     def set_value(self, value, password):
-        site=hash_Sha256(value)
-        psw,nonce,tag=encrypt_AES_GCM(password,self.pass_pbkdf2)
-        Insert_site(site,psw,nonce,tag)
+        site = hash_Sha256(value)
+        psw, nonce, tag = encrypt_AES_GCM( password.encode("utf8"), self.pass_pbkdf2 )
+        insert_site(site, psw, nonce, tag)
 
     def get_value(self, value):
         nombre = value
