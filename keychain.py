@@ -42,7 +42,7 @@ class Keychain(object):
     def get_value(self, value):
         nombre = value
         nombre_cifrado = hash_Sha256(nombre)
-        self.site_pass = search(nombre_cifrado)
+        self.site_pass = search(nombre_cifrado, self.pass_pbkdf2)
         return self.site_pass
 
     def remove(self, name):

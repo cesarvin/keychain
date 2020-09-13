@@ -99,17 +99,17 @@ def insert_site(site, password,nonce,tag):
         print(e)
 
 
-def search(site):       
+def search(site, key):       
     try:
         #coneccion a la db, la crea si no existe
         cnn = conection(db_file)
         c = cnn.cursor()
 
-        c.execute("SELECT password, nonce, tag FROM info WHERE nombre = ? LIMIT 1", (site,))
-        data=c.fetchall()
+        c.execute("SELECT password, nonce, tag FROM info WHERE name = ? LIMIT 1", (site,))
+        rows=c.fetchall()
         for row in rows: 
             site_pass = row[0],row[1],row[2]
-            dp = decryptMainPass(site_pass)
+            dp = decryptMainPass(site_pass, key)
         #     if (dp.decode("utf-8")==password):
         #         logged = True
 
