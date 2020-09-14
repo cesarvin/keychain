@@ -42,18 +42,18 @@ class Ui_Search(object):
         self.label_4.setStyleSheet("font: 16pt \".SF NS Text\";")
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.label_4.setObjectName("label_4")
-        self.tableWidget = QtWidgets.QTableWidget(self.frame)
-        self.tableWidget.setGeometry(QtCore.QRect(90, 300, 301, 53))
-        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.tableWidget.setWordWrap(True)
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(2)
-        self.tableWidget.setRowCount(0)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(1, item)
+        # self.tableWidget = QtWidgets.QTableWidget(self.frame)
+        # self.tableWidget.setGeometry(QtCore.QRect(90, 300, 301, 53))
+        # self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        # self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        # self.tableWidget.setWordWrap(True)
+        # self.tableWidget.setObjectName("tableWidget")
+        # self.tableWidget.setColumnCount(2)
+        # self.tableWidget.setRowCount(0)
+        # item = QtWidgets.QTableWidgetItem()
+        # self.tableWidget.setHorizontalHeaderItem(0, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # self.tableWidget.setHorizontalHeaderItem(1, item)
         self.pushButton_buscar = QtWidgets.QPushButton(self.frame)
         self.pushButton_buscar.setGeometry(QtCore.QRect(190, 230, 113, 32))
         self.pushButton_buscar.setStyleSheet("background-color: rgb(255, 255, 255);\n"
@@ -71,10 +71,10 @@ class Ui_Search(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_3.setText(_translate("MainWindow", "Ingrese sitio"))
         self.label_4.setText(_translate("MainWindow", "BUSCAR"))
-        item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "SITIO"))
-        item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "PASSWORD"))
+        # item = self.tableWidget.horizontalHeaderItem(0)
+        # item.setText(_translate("MainWindow", "SITIO"))
+        # item = self.tableWidget.horizontalHeaderItem(1)
+        # item.setText(_translate("MainWindow", "PASSWORD"))
         self.pushButton_buscar.setText(_translate("MainWindow", "Buscar"))
 
     def openPopUpError(self, mensaje):
@@ -90,9 +90,28 @@ class Ui_Search(object):
         x = msgError.exec_()
 
     def buscar_sitio(self):
-        print("Si funciona al presionar")
+        k = Keychain()
+        k.init(self.password)
+    
+        # carga los datos 
+        tuples, tuples_password = k.dump()
 
+        # verifica la contraseña y la integridad de 
+        isload = k.load(self.password, None, None)
 
+        if isload == False:
+            k = None
+            self.openPopUpError("error en programa")
+
+        # si isload = true se ejecutan las opciones del programa, sino se vuelve a solicitar la clave maestra.
+        else:
+            sitio = self.textEdit_site.toPlainText()
+            contraseña_sitio = k.get_value(sitio)
+            if contraseña_sitio == None:
+                self.openPopUpError("El sitio no existe")
+            else:
+                self.openPopUpSucces(contraseña_sitio)
+            
 
 # if __name__ == "__main__":
 #     import sys
