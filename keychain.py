@@ -66,19 +66,28 @@ class Keychain(object):
 
 
     def set_value(self, value, password):
-        site = hash_Sha256(value)
-        psw, nonce, tag = encrypt_AES_GCM( password.encode("utf8"), self.pass_pbkdf2 )
-        insert_site(site, psw, nonce, tag, self.pass_pbkdf2)
+        try:
+            site = hash_Sha256(value)
+            psw, nonce, tag = encrypt_AES_GCM( password.encode("utf8"), self.pass_pbkdf2 )
+            insert_site(site, psw, nonce, tag, self.pass_pbkdf2)
+        except Exception as e: 
+            return ("Error al guardar la clave")
 
     def get_value(self, value):
-        nombre = value
-        nombre_cifrado = hash_Sha256(nombre)
-        self.site_pass = search_site(nombre_cifrado, self.pass_pbkdf2)
-        return self.site_pass
+        try:
+            nombre = value
+            nombre_cifrado = hash_Sha256(nombre)
+            self.site_pass = search_site(nombre_cifrado, self.pass_pbkdf2)
+            return self.site_pass
+        except Exception as e: 
+            return ("Error al obtener la clave")
 
     def remove(self, name):
-        nombre = name
-        nombre_cifrado = hash_Sha256(nombre)
-        delete_site(nombre_cifrado, self.pass_pbkdf2)
+        try:
+            nombre = name
+            nombre_cifrado = hash_Sha256(nombre)
+            delete_site(nombre_cifrado, self.pass_pbkdf2)
+        except Exception as e: 
+            print ("Error al eliminar la clave")
         
 
