@@ -16,7 +16,7 @@ class Keychain(object):
         self.salt = None
         self.pass_pbkdf2 = None
         #self.isload = False
-        self.it = 200
+        self.it = 0
         pass
 
     def init(self, password):
@@ -27,16 +27,14 @@ class Keychain(object):
             self.salt = os.urandom(64)
             save_salt(self.salt)
         # pbkdf2
-        self.i = 5
+        self.it = get_random()
         password = password.encode("utf8")
-        self.pass_pbkdf2 = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.i, 32)
+        self.pass_pbkdf2 = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.it, 32)
 
     def load(self, password, representation, trustedDataCheck):
         isload = True
         password = password.encode("utf8")
-        self.pass_check = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.i, 32)
-        print (self.pass_pbkdf2)
-        print (self.pass_check)
+        self.pass_check = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.it, 32)
         
         if self.pass_check != self.pass_pbkdf2:
             isload = False
