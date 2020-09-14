@@ -42,13 +42,20 @@ while ans:
 
         if choice==1:
             # solicitar datos sitio y contraseña y guardarlos
-            print("holi ingresar")
+            print("ingresar:")
+            sitio = input("Ingrese el nombre del sitio: ")
+            password_sitio = input("Ingrese la contraseña de este sitio: ")
+            k.set_value(str(sitio), str(password_sitio))
         elif choice==2:
             # solicitar sitio y mostrar la contraseña
-            print("holi consultar")
+            print("consultar")
+            sitio = input("Ingrese el nombre del sitio: ")
+            print(k.get_value(str(sitio)))
         elif choice==3:
             # solicitar sitio y eliminarlo
-            print("holi elimniar")
+            print("elimniar")
+            sitio = input("Ingrese el nombre del sitio: ")
+            k.remove(str(sitio))
         elif choice==4:
             # salir
             print("salir")
