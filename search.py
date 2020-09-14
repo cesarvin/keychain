@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
+from keychain import *
 
 
 class Ui_Search(object):
@@ -59,7 +60,7 @@ class Ui_Search(object):
 "border-color: rgb(0, 0, 0);\n"
 "border-radius: 10px;")
         self.pushButton_buscar.setObjectName("pushButton_buscar")
-        self.pushButton_buscar.clicked.connect(self.prueba)
+        self.pushButton_buscar.clicked.connect(self.buscar_sitio)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -88,7 +89,7 @@ class Ui_Search(object):
         msgError.setIcon(QMessageBox.Information)
         x = msgError.exec_()
 
-    def prueba(self):
+    def buscar_sitio(self):
         print("Si funciona al presionar")
 
 
