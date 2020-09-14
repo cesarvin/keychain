@@ -9,6 +9,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
+from menu import Ui_Menu
+from keychain import *
 
 
 class Ui_Login(object):
@@ -44,7 +46,7 @@ class Ui_Login(object):
 "border-color: rgb(0, 0, 0);\n"
 "border-radius: 10px;")
         self.pushButton_ingresar.setObjectName("pushButton_ingresar")
-        self.pushButton_ingresar.clicked.connect(self.prueba)
+        self.pushButton_ingresar.clicked.connect(self.ingresar_sitio)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -68,9 +70,29 @@ class Ui_Login(object):
         msgError.setIcon(QMessageBox.Information)
         x = msgError.exec_()
 
-    def prueba(self):
-        print("Si funciona al presionar")
+    def ingresar_sitio(self):
+        k = Keychain()
+        password = self.textEdit_passwordMaster.toPlainText()
+        k.init(password)
+        
+        # carga los datos 
+        tuples, tuples_password = k.dump()
 
+        # verifica la contraseña y la integridad de 
+        isload = k.load(password, None, None)
+
+        if isload == False:
+            k = None
+            self.openPopUpError("Contraseña incorrecta")
+
+        # si isload = true se ejecutan las opciones del programa, sino se vuelve a solicitar la clave maestra.
+        else:
+            self.openPopUpSucces("Contraseña correcta")
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Menu(password)
+            self.ui.setupUi(self.window)
+            Login.hide()
+            self.window.show()
 
 
 if __name__ == "__main__":

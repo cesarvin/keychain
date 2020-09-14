@@ -12,6 +12,10 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 class Ui_Search(object):
+    def __init__(self, password):
+        super(Ui_Search, self).__init__()
+        self.password = password
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -89,13 +93,13 @@ class Ui_Search(object):
 
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Search = QtWidgets.QMainWindow()
-    ui = Ui_Search()
-    ui.setupUi(Search)
-    Search.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     Search = QtWidgets.QMainWindow()
+#     ui = Ui_Search()
+#     ui.setupUi(Search)
+#     Search.show()
+#     sys.exit(app.exec_())
 
 

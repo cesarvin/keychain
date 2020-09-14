@@ -13,6 +13,10 @@ from insert import Ui_Insert
 from search import Ui_Search
 
 class Ui_Menu(object):
+    def __init__(self, password):
+        super(Ui_Menu, self).__init__()
+        self.password = password
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -68,29 +72,29 @@ class Ui_Menu(object):
 
     def openDelete(self):
         self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Delete()
+        self.ui = Ui_Delete(self.password)
         self.ui.setupUi(self.window)
         self.window.show()
 
     def openInsert(self):
         self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Insert()
+        self.ui = Ui_Insert(self.password)
         self.ui.setupUi(self.window)
         self.window.show()
 
     def openSearch(self):
         self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Search()
+        self.ui = Ui_Search(self.password)
         self.ui.setupUi(self.window)
         self.window.show()
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Menu = QtWidgets.QMainWindow()
-    ui = Ui_Menu()
-    ui.setupUi(Menu)
-    Menu.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     Menu = QtWidgets.QMainWindow()
+#     ui = Ui_Menu()
+#     ui.setupUi(Menu)
+#     Menu.show()
+#     sys.exit(app.exec_())
 

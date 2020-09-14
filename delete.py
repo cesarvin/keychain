@@ -9,9 +9,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
+from keychain import *
 
 
 class Ui_Delete(object):
+    def __init__(self, password):
+        super(Ui_Delete, self).__init__()
+        self.password = password
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -43,7 +48,7 @@ class Ui_Delete(object):
 "border-color: rgb(0, 0, 0);\n"
 "border-radius: 10px;")
         self.pushButton_eliminar.setObjectName("pushButton_eliminar")
-        self.pushButton_eliminar.clicked.connect(self.prueba)
+        self.pushButton_eliminar.clicked.connect(self.eliminar_sitio)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -68,10 +73,25 @@ class Ui_Delete(object):
         msgError.setIcon(QMessageBox.Information)
         x = msgError.exec_()
 
-    def prueba(self):
-        print("Si funciona al presionar")
+    def eliminar_sitio(self):
+        k = Keychain()
+        k.init(self.password)
+    
+        # carga los datos 
+        tuples, tuples_password = k.dump()
 
+        # verifica la contraseña y la integridad de 
+        isload = k.load(self.password, None, None)
 
+        if isload == False:
+            k = None
+            self.openPopUpError("error en programa")
+
+        # si isload = true se ejecutan las opciones del programa, sino se vuelve a solicitar la clave maestra.
+        else:
+            sitio = self.textEdit_site.toPlainText()
+            k.remove(str(sitio))
+            self.openPopUpSucces("Se elimino correctamente")
 
 if __name__ == "__main__":
     import sys
