@@ -37,7 +37,7 @@ class Ui_Login(object):
         self.label_2 = QtWidgets.QLabel(self.frame)
         self.label_2.setGeometry(QtCore.QRect(90, 40, 301, 121))
         self.label_2.setText("")
-        self.label_2.setPixmap(QtGui.QPixmap("../Proyecto1/keychain/logo.jpeg"))
+        self.label_2.setPixmap(QtGui.QPixmap("logo.jpeg"))
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.pushButton_ingresar = QtWidgets.QPushButton(self.frame)
