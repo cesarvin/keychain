@@ -79,30 +79,35 @@ def insert_site(site, password, nonce, tag, key=None):
             cnn.commit()
 
             cnn.close()
+            print("Se guardo correctamente el sitio y la contraseña!")
             
         else:
             cnn = conection(db_file)
-
+            print("El sitio ya existe")
             c = cnn.cursor()
             c.execute("UPDATE info SET password =?, nonce=?, tag=? WHERE name=?", (password, nonce, tag, site,))
             cnn.commit()
-
+            print("Se actualizo correctamente el sitio y la contraseña!")
             cnn.close()
 
     except Error as e: 
         print(e)
 
-def delete_site(site):
+def delete_site(site, key=None):
     try:
-        #coneccion a la db, la crea si no existe
-        cnn = conection(db_file)
-        c = cnn.cursor()
+        if(search_site(site, key) == None):
+            print("El sitio no existe")
+        else:
+            #coneccion a la db, la crea si no existe
+            cnn = conection(db_file)
+            c = cnn.cursor()
 
-        c.execute("DELETE FROM info WHERE name = ?", (site,))
-        
-        cnn.commit()
+            c.execute("DELETE FROM info WHERE name = ?", (site,))
+            print("Exito! se elimino el sitio")
+            
+            cnn.commit()
 
-        cnn.close()
+            cnn.close()
 
     except Error as e: 
         print(e)
