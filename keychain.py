@@ -15,36 +15,44 @@ class Keychain(object):
     def __init__(self):
         self.salt = None
         self.pass_pbkdf2 = None
-        #self.isload = False
         self.it = 0
         pass
 
     def init(self, password):
         #verifica el si existe la db para consultar el salt, sino crea el salt y lo guarda
+        isnew = False
         if os.path.isfile(db_file):
             self.salt = get_salt()
+            isnew = False
         else:
             self.salt = os.urandom(64)
             save_salt(self.salt)
+            isnew = True
+
+        self.it = int(len(self.salt) * len(password) % 2)
         # pbkdf2
-        self.it = get_random()
         password = password.encode("utf8")
         self.pass_pbkdf2 = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.it, 32)
+        
+        if isnew:
+            save_main(self.pass_pbkdf2)
 
     def load(self, password, representation, trustedDataCheck):
         isload = True
         password = password.encode("utf8")
-        self.pass_check = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.it, 32)
-        
-        if self.pass_check != self.pass_pbkdf2:
-            isload = False
+        pass_check = pbkdf2_hmac('sha256', password, self.salt, 100000 + 500 * self.it, 32)
+        main_pass = get_mainpass()    
+        # print(pass_check)
+        # print(main_pass)
+        if pass_check != main_pass:
+             isload = False
 
-        if trustedDataCheck != None: 
+        if trustedDataCheck != None and isload == True: 
             trusted_sha256 = sha256_Hmac(mensaje=representation, llave=self.pass_pbkdf2)
             if trustedDataCheck != trusted_sha256:
                 isload = False
 
-        return isload                
+        return isload
 
     def dump(self):
         rows = search_all()

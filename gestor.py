@@ -21,7 +21,14 @@ while ans:
 
     k.init(password)
     
-    isload = k.load("holi", None, None)
+    # carga los datos 
+    tuples, tuples_password = k.dump()
+
+    # verifica la contraseña y la integridad de 
+    isload = k.load(password, None, None)
+
+    if isload == False:
+        k = None
     
     # si isload = true se ejecutan las opciones del programa, sino se vuelve a solicitar la clave maestra.
     while isload:
@@ -32,8 +39,6 @@ while ans:
             2. Consultar sitio - contraseña
             3. Eliminar sitio del gestor
             4. Salir\n"""))
-
-        print("choice---->", choice)
 
         if choice==1:
             # solicitar datos sitio y contraseña y guardarlos
@@ -49,4 +54,5 @@ while ans:
             print("salir")
             ans = False
             isload = False
+            k = None
             exit()

@@ -22,7 +22,7 @@ def createSystemTables(cnn):
         #coneccion a la db, la crea si no existe
         c = cnn.cursor()
         #crea la tabla para la clave principal
-        c.execute("""CREATE TABLE main (salt text);""")
+        c.execute("""CREATE TABLE main (salt text, mainpass text NULL);""")
         c.execute("""CREATE TABLE info (name text,password text, nonce text, tag text);""")
 
     except Error as e:
@@ -138,7 +138,7 @@ def search_all():
         cnn = conection(db_file)
         c = cnn.cursor()
 
-        c.execute("SELECT name, password FROM info ")
+        c.execute("SELECT name, password, nonce, tag FROM info ")
         rows=c.fetchall()
        
         cnn.close()
@@ -146,3 +146,33 @@ def search_all():
 
     except Error as e: 
         print(e)        
+
+
+def save_main(mp):
+    try:
+        cnn = conection(db_file)
+        c = cnn.cursor()
+
+        c.execute("UPDATE main SET mainpass = ? WHERE 1=1", (mp,))
+        
+        cnn.commit()
+        cnn.close()
+    except Error as e: 
+        print(e)
+
+def get_mainpass():
+    try: 
+        cnn = conection(db_file)
+        c = cnn.cursor()
+        c.execute("""SELECT mainpass FROM main LIMIT 1""")
+        rows = c.fetchall()
+        
+        for row in rows: 
+            mainpass = row[0]
+        
+    except Error as e:
+        print (e)
+    finally:
+        if cnn:
+            cnn.close()
+    return mainpass        
