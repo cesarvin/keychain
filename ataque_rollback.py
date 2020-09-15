@@ -47,11 +47,9 @@ def actualizar_claves():
             for row in rows: 
                 name_n = row[0]
                 site_pass_n = row[1]
-                site_nonce_n = row[2]
-                site_tag_n = row[3]
 
 
-        c.execute("UPDATE info SET password =?, nonce=?, tag=? WHERE name=?", (site_pass_n, site_nonce_n, site_tag_n, name,))
+        c.execute("UPDATE info SET password =? WHERE name=?", (site_pass_n, name,))
 
         cnn.commit()
 
