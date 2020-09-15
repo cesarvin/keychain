@@ -20,8 +20,6 @@ def actualizar_claves():
         cnn = conection(db_file)
         c = cnn.cursor()
         
-        # c.execute("""CREATE TABLE tmpinfoswap (name text,password text);""")
-
         c.execute("SELECT name, password FROM info ORDER BY name DESC LIMIT 1;")
         rows=c.fetchall()
         if len(rows) == 0:
@@ -31,8 +29,6 @@ def actualizar_claves():
             for row in rows: 
                 name = row[0]
                 site_pass = row[1]
-
-        # c.execute("INSERT INTO tmpinfoswap(name, password) VALUES(?,?)", (name, site_pass,))        
 
         c.execute("SELECT name, password FROM info ORDER BY name ASC LIMIT 1;")
         rows=c.fetchall()
@@ -44,13 +40,9 @@ def actualizar_claves():
                 name_n = row[0]
                 site_pass_n = row[1]
             
-        # c.execute("INSERT INTO tmpinfoswap(name, password) VALUES(?,?)", (name_n, site_pass_n,))        
-
         c.execute("UPDATE info SET password =? WHERE name=?", (site_pass_n, name,))
 
         c.execute("UPDATE info SET password =? WHERE name=?", (site_pass, name_n,))
-
-        # c.execute("DROP TABLE tmpinfoswap")
 
         cnn.commit()
 
