@@ -71,7 +71,7 @@ def insert_site(site, password, nonce, tag, key=None):
     try:
         #coneccion a la db, la crea si no existe
         
-        if (search_site(site, key) == None):
+        if (search_site(site, key, False) == None):
             cnn = conection(db_file)
 
             c = cnn.cursor()
@@ -113,7 +113,7 @@ def delete_site(site, key=None):
         print(e)
 
 
-def search_site(site, key):       
+def search_site(site, key, decript=True):       
     try:
         #coneccion a la db, la crea si no existe
         cnn = conection(db_file)
@@ -127,7 +127,10 @@ def search_site(site, key):
         else:
             for row in rows: 
                 site_pass = row[0],row[1],row[2]
-                dp = decryptMainPass(site_pass, key)
+                if decript==True:
+                    dp = decryptMainPass(site_pass, key)
+                else:
+                    dp = b'ok'
             #     if (dp.decode("utf-8")==password):
             #         logged = True
 
