@@ -90,5 +90,5 @@ def rollback():
         print(e)
         
 
-#actualizar_claves()
-rollback()
+actualizar_claves()
+#rollback()

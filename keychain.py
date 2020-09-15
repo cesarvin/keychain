@@ -67,7 +67,8 @@ class Keychain(object):
 
     def set_value(self, value, password):
         try:
-            site = hash_Sha256(value)
+            #site = hash_Sha256(value)
+            site = sha256_Hmac(mensaje=value, llave=self.pass_pbkdf2)
             psw, nonce, tag = encrypt_AES_GCM( password.encode("utf8"), self.pass_pbkdf2 )
             insert_site(site, psw, nonce, tag, self.pass_pbkdf2)
         except Exception as e: 
@@ -76,7 +77,8 @@ class Keychain(object):
     def get_value(self, value):
         try:
             nombre = value
-            nombre_cifrado = hash_Sha256(nombre)
+            #nombre_cifrado = hash_Sha256(nombre)
+            nombre_cifrado = sha256_Hmac(mensaje=nombre, llave=self.pass_pbkdf2)
             self.site_pass = search_site(nombre_cifrado, self.pass_pbkdf2)
             return self.site_pass
         except Exception as e: 
@@ -85,7 +87,8 @@ class Keychain(object):
     def remove(self, name):
         try:
             nombre = name
-            nombre_cifrado = hash_Sha256(nombre)
+            #nombre_cifrado = hash_Sha256(nombre)
+            nombre_cifrado = sha256_Hmac(mensaje=nombre, llave=self.pass_pbkdf2)
             delete_site(nombre_cifrado, self.pass_pbkdf2)
         except Exception as e: 
             print ("Error al eliminar la clave")
